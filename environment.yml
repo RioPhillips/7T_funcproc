@@ -1,0 +1,23 @@
+name: funcproc
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.9
+  - pip
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - pyyaml
+  - nibabel
+  - joblib
+  - pip:
+      # pRF fitting
+      - git+https://github.com/VU-Cog-Sci/prfpy.git
+      # denoising (needs a recent nilearn; see pybest instructions)
+      - git+https://github.com/lukassnoek/pybest.git
+      # colleague's wrappers that call_prf / call_pybest are built on
+      # (kept here as the default approach; see open question in README plan)
+      # - git+https://github.com/gjheij/fmriproc.git
+      # - git+https://github.com/gjheij/lazyfmri.git
+      - -e .

@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: funcproc
+Version: 0.0.1
+Summary: Functional (BOLD) analysis on fMRIPrep outputs for the 7T pipeline: denoising and pRF fitting.
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: pyyaml
+Requires-Dist: nibabel
+Requires-Dist: joblib

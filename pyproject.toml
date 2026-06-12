@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "funcproc"
+version = "0.0.1"
+description = "Functional (BOLD) analysis on fMRIPrep outputs for the 7T pipeline: denoising and pRF fitting."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "pyyaml",
+    "nibabel",
+    "joblib",
+    # prfpy  -> from source: https://github.com/VU-Cog-Sci/prfpy
+    # pybest -> from source: https://github.com/lukassnoek/pybest
+    # fmriproc / lazyfmri (colleague's wrappers) -> see environment.yml / open question
+]
+
+[project.scripts]
+funcproc = "funcproc.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["funcproc*"]
+
+[tool.setuptools.package-data]
+funcproc = ["vendor/**/*"]

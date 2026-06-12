@@ -1,0 +1,21 @@
+# Example top-level project config for funcproc.
+# (Path/layout + denoising defaults. pRF-fitting settings live in
+#  example_prf_config.yml, mirroring the colleague's split between a project
+#  config and a per-analysis prf settings file.)
+
+# ----- project layout -----
+project:
+  derivatives: null        # /path/to/derivatives   (contains fmriprep/, pybest/, prf/)
+  fmriprep_dir: null       # default: <derivatives>/fmriprep
+  pybest_dir: null         # default: <derivatives>/pybest
+  prf_dir: null            # default: <derivatives>/prf
+
+# ----- acquisition -----
+space: fsnative            # recommended; pybest on volumetric gives "pepper-corn" noise
+tasks: []                  # e.g. [pRF] or [8bars]
+TR: 1.5
+
+# ----- denoising (pybest) defaults -----
+denoise:
+  n_comps: 20              # PCA components (Marco's 3D-EPI TR=1.32 default)
+  raw: true               # un-z-score after pybest (so PSC is possible downstream)
