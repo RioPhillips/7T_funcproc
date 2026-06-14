@@ -1,14 +1,14 @@
 # funcproc
 
-Functional processing for the 7T pipeline — stage 3, after `bids7t` (organising) and
-`anatprep` (anatomy). It works on **fMRIPrep output** and does two things:
+Functional processing for 7T data. Can be used as analysis after after `bids7t` (organising) and
+`anatprep` (anatomical pre-processing). It works on **fMRIPrep output** and does two things:
 
-- **`denoise`** — denoises the functional data with [pybest](https://github.com/gjheij/pybest)
+- **`denoise`**: denoises the functional data with [pybest](https://github.com/gjheij/pybest)
   and un-z-scores it so it's percent-signal-change ready.
-- **`prf`** — fits population receptive fields with [prfpy](https://github.com/VU-Cog-Sci/prfpy)
+- **`prf`**: fits population receptive fields with [prfpy](https://github.com/VU-Cog-Sci/prfpy)
   (Gaussian, optionally Norm/DN) and saves a visual-field coverage heatmap.
 
-Both are subcommands of one tool: `funcproc denoise …` and `funcproc prf …`.
+Both are subcommands: `funcproc denoise …` and `funcproc prf …`.
 
 ## Install
 
