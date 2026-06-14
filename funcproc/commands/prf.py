@@ -2,7 +2,7 @@
 =================
 Population receptive field (pRF) fitting with prfpy, on the denoise output.
 
-Flow (mirrors the spinoza substance, built directly on prfpy a la Marcus/Dag):
+Flow:
     [1] load settings (code/fit_settings_prf.yml) + design matrix
     [2] assemble data: per-run unzscored -> Marco PSC -> median across runs
     [3] PRFStimulus2D -> Gaussian grid+iterative fit (optionally Norm/DN after)
@@ -51,6 +51,9 @@ def add_parser(subparsers):
                    help="number of initial no-stim volumes (default: inferred from DM)")
     p.add_argument("--grid", action="store_true", help="grid fit only (no iterative)")
     p.add_argument("--no-hrf", action="store_true", help="do not fit the HRF")
+    p.add_argument("--tc", action="store_true",
+                   help="use the trust-constrained minimizer (like call_prf --tc); "
+                        "default is the faster L-BFGS-B")
     p.add_argument("--rsq-thresh", type=float, default=0.1,
                    help="rsq threshold for the coverage heatmap (default: 0.1)")
     p.add_argument("-j", "--jobs", type=int, default=None, help="parallel jobs")
@@ -79,21 +82,24 @@ def _resolve_task(args, cfg):
 
 
 def _read_tr(studydir, sub, task, ses, fallback):
-    """Best-effort: read RepetitionTime from a fMRIPrep *_bold.json; else fallback."""
+    """Read RepetitionTime (seconds) from a BIDS *_bold.json sidecar. Checks the
+    fMRIPrep derivatives first, then rawdata; falls back to the settings value."""
     if not studydir:
         return fallback
-    func = opj(studydir, "derivatives", "fmriprep", f"sub-{sub}", "func")
-    if ses:
-        func = opj(studydir, "derivatives", "fmriprep", f"sub-{sub}", f"ses-{ses}", "func")
-    cands = sorted(glob.glob(opj(func, f"sub-{sub}*task-{task}*_bold.json")))
-    for j in cands:
-        try:
-            with open(j) as f:
-                tr = json.load(f).get("RepetitionTime")
-            if tr:
-                return float(tr)
-        except Exception:
-            pass
+    sesdir = f"ses-{ses}" if ses else ""
+    roots = [
+        opj(studydir, "derivatives", "fmriprep", f"sub-{sub}", sesdir, "func"),
+        opj(studydir, "rawdata", f"sub-{sub}", sesdir, "func"),
+    ]
+    for func in roots:
+        for j in sorted(glob.glob(opj(func, f"sub-{sub}*task-{task}*_bold.json"))):
+            try:
+                with open(j) as f:
+                    tr = json.load(f).get("RepetitionTime")
+                if tr:
+                    return float(tr)
+            except Exception:
+                pass
     return fallback
 
 
@@ -159,6 +165,8 @@ def run(args):
     settings = prf_fit.load_settings(args.settings or cfg.get("prf", {}))
     if args.jobs:
         settings["n_jobs"] = args.jobs
+    if args.tc:
+        settings["constraints"] = True   # trust-constrained fitter
 
     dm_path = _resolve_dm(args, cfg, studydir, task)
     dm = prf_fit.load_design_matrix(dm_path)

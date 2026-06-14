@@ -3,7 +3,7 @@
 Denoise fMRIPrep output with pybest and produce both z-scored and
 un-z-scored (PSC-ready) time series.
 
-Pipeline (mirrors the colleague's call_pybest + call_unzscore):
+Pipeline:
     [pre]   store per-vertex/voxel mean+std of the raw fMRIPrep BOLD  -> tmp/
     [run]   run pybest (per task; per hemisphere for surface)         -> denoising/
     [post]  invert pybest's z-scoring (zscored*std + mean)            -> unzscored/
