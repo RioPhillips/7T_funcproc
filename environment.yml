@@ -11,21 +11,15 @@ dependencies:
   - pyyaml
   - nibabel
   - joblib
-  # deps the gjheij/pybest fork imports but does not all declare:
   - scikit-learn
   - click
   - tqdm
   - h5py
   - toml
   - pip:
-      # nilearn: pybest needs the latest (git) version, NOT the PyPI release
-      # (pybest uses not-yet-released nilearn APIs).
       - git+https://github.com/nilearn/nilearn.git
-      # pRF fitting (for the upcoming 'prf' command)
       - git+https://github.com/VU-Cog-Sci/prfpy.git
-      # denoising — colleague's fork, matches the spinoza pipeline
       - git+https://github.com/gjheij/pybest.git
-      # colleague's wrappers (depend-vs-vendor decided when we build prf)
       # - git+https://github.com/gjheij/fmriproc.git
       # - git+https://github.com/gjheij/lazyfmri.git
       - -e .
