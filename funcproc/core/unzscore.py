@@ -16,7 +16,7 @@ import pickle
 import numpy as np
 
 
-# ---------------------------------------------------------------- surface ----
+# ---- surface ----
 def compute_stats_surface(arr):
     """Per-vertex mean and std over time. ``arr`` is ``(time, vertices)``."""
     return {
@@ -45,7 +45,7 @@ def apply_unzscore_surface(zscored, stats):
     return zscored * std.reshape(bshape) + avg.reshape(bshape)
 
 
-# ----------------------------------------------------------------- volume ----
+# ----- volume ----
 def compute_stats_nifti(img):
     """Per-voxel mean and std over time for a 4D nibabel image."""
     data = img.get_fdata()
@@ -67,7 +67,7 @@ def apply_unzscore_nifti(img, stats):
     return nb.Nifti1Image(unz, affine=img.affine, header=hdr)
 
 
-# -------------------------------------------------------------------- io -----
+# -------- io -----
 def save_stats(path, stats):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "wb") as f:

@@ -1,21 +1,49 @@
-# Example top-level project config for funcproc.
-# (Path/layout + denoising defaults. pRF-fitting settings live in
-#  example_prf_config.yml, mirroring the colleague's split between a project
-#  config and a per-analysis prf settings file.)
+# funcproc study config
+# ---------------------
+# Place this at <studydir>/code/funcproc.yml. Every value is optional; CLI flags always override it.
 
-# ----- project layout -----
-project:
-  derivatives: null        # /path/to/derivatives   (contains fmriprep/, pybest/, prf/)
-  fmriprep_dir: null       # default: <derivatives>/fmriprep
-  pybest_dir: null         # default: <derivatives>/pybest
-  prf_dir: null            # default: <derivatives>/prf
+# ----- paths (default to <studydir>/derivatives/...) -----
+derivatives: null        # e.g. /data/7T049_CVI_pRF_lund/derivatives
+fmriprep_dir: null       # default: <derivatives>/fmriprep
+pybest_dir: null         # default: <derivatives>/pybest
+prf_dir: null            # default: <derivatives>/prf   (used later by 'prf')
 
 # ----- acquisition -----
-space: fsnative            # recommended; pybest on volumetric gives "pepper-corn" noise
-tasks: []                  # e.g. [pRF] or [8bars]
-TR: 1.5
+space: fsnative          
+tasks: [8bars]           # tasks to process when -t is not given
 
-# ----- denoising (pybest) defaults -----
+
+# ----- denoising (pybest) -----
 denoise:
-  n_comps: 20              # PCA components (Marco's 3D-EPI TR=1.32 default)
-  raw: true               # un-z-score after pybest (so PSC is possible downstream)
+  n_comps: 20            # PCA components
+
+
+# ----- pRF fitting -----
+prf:
+  # design matrix: leave null to auto-find code/design_matrices/design_task-<task>.mat,
+  # or set a path, or a per-task map (see note below).
+  design_matrix: null
+
+  hrf:
+    pars: [1, 1, 0]
+    deriv_bound: [0, 10]
+    disp_bound: [0, 0]
+  xtol: 1.0e-4
+  ftol: 1.0e-4
+  grid_nr: 20
+  rsq_threshold: 0.1
+  TR: 1.5
+  filter_predictions: false
+  n_jobs: 4
+  n_batches: 10
+  screen_size_cm: 39.3
+  screen_distance_cm: 196
+  dm_edges_clipping: [0, 0, 0, 0]
+  normalize_RFs: false
+  n_pix: 100
+  eps: 1.0e-1
+  fixed_grid_baseline: 0
+  bold_bsl: [0, 0]
+  prf_ampl: [0, 1000]
+  constraints: false
+  save_grids: true

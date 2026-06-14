@@ -7,7 +7,7 @@ name = "funcproc"
 version = "0.0.1"
 description = "Functional (BOLD) analysis on fMRIPrep outputs for the 7T pipeline: denoising and pRF fitting."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10,<3.13"
 dependencies = [
     "numpy",
     "scipy",
@@ -16,9 +16,16 @@ dependencies = [
     "pyyaml",
     "nibabel",
     "joblib",
-    # prfpy  -> from source: https://github.com/VU-Cog-Sci/prfpy
-    # pybest -> from source: https://github.com/lukassnoek/pybest
-    # fmriproc / lazyfmri (colleague's wrappers) -> see environment.yml / open question
+    # pybest (gjheij fork) imports these but doesn't declare them all:
+    "scikit-learn",
+    "click",
+    "tqdm",
+    "h5py",
+    "toml",
+    "nilearn==0.11.1",
+    # source-only packages (installed straight from git):
+    "prfpy @ git+https://github.com/VU-Cog-Sci/prfpy.git",
+    "pybest @ git+https://github.com/gjheij/pybest.git",
 ]
 
 [project.scripts]

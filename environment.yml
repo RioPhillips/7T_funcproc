@@ -1,8 +1,8 @@
-name: funcproc
+name: dev_funcproc
 channels:
   - conda-forge
 dependencies:
-  - python>=3.9
+  - python>=3.10,<3.13
   - pip
   - numpy
   - scipy
@@ -11,13 +11,21 @@ dependencies:
   - pyyaml
   - nibabel
   - joblib
+  # deps the gjheij/pybest fork imports but does not all declare:
+  - scikit-learn
+  - click
+  - tqdm
+  - h5py
+  - toml
   - pip:
-      # pRF fitting
+      # nilearn: pybest needs the latest (git) version, NOT the PyPI release
+      # (pybest uses not-yet-released nilearn APIs).
+      - git+https://github.com/nilearn/nilearn.git
+      # pRF fitting (for the upcoming 'prf' command)
       - git+https://github.com/VU-Cog-Sci/prfpy.git
-      # denoising (needs a recent nilearn; see pybest instructions)
-      - git+https://github.com/lukassnoek/pybest.git
-      # colleague's wrappers that call_prf / call_pybest are built on
-      # (kept here as the default approach; see open question in README plan)
+      # denoising — colleague's fork, matches the spinoza pipeline
+      - git+https://github.com/gjheij/pybest.git
+      # colleague's wrappers (depend-vs-vendor decided when we build prf)
       # - git+https://github.com/gjheij/fmriproc.git
       # - git+https://github.com/gjheij/lazyfmri.git
       - -e .
